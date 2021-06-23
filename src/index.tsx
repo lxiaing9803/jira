@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {loadDevTools} from 'jira-dev-tool'
+import { loadDevTools } from 'jira-dev-tool'
+import { AppProviders } from 'context';
 
-loadDevTools(()=>ReactDOM.render(
+loadDevTools(() => ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AppProviders>
+      <App />
+    </AppProviders>
   </React.StrictMode>,
   document.getElementById('root')
 ))
