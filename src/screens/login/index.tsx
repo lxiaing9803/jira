@@ -17,7 +17,7 @@ export const LoginScreen = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {user && (<div>登录成功：用户名：{user?.name}</div>)}
+      {user && (<div>登录成功：用户名：{user.name},token:{user.token}</div>)}
       <div>
         <label htmlFor="userName">用户名</label>
         <input type="text" id="userName" />
