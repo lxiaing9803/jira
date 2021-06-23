@@ -35,30 +35,45 @@ export const useDebounce = <V>(value: V, delay?: number) => {
   return debouncedValue;
 };
 
-export const useArray = <v>(array: v[]) => {
-  const [value, setValue] = useState(array);
-  // 清空数据
-  const clear = () => {
-    setValue([])
-  }
-  // 按下标清除数据
-  const removeIndex = (currentIndex: number) => {
-    let arr = [...value];
-    arr.splice(currentIndex, 1);
-    setValue([...arr])
-  }
-  // 添加数据
-  const add = (item: v) => {
-    let arr = [...value];
-    arr.push(item);
-    setValue([...arr])
-  }
+// export const useArray = <v>(array: v[]) => {
+//   const [value, setValue] = useState(array);
+//   // 清空数据
+//   const clear = () => {
+//     setValue([])
+//   }
+//   // 按下标清除数据
+//   const removeIndex = (currentIndex: number) => {
+//     let arr = [...value];
+//     arr.splice(currentIndex, 1);
+//     setValue([...arr])
+//   }
+//   // 添加数据
+//   const add = (item: v) => {
+//     let arr = [...value];
+//     arr.push(item);
+//     setValue([...arr])
+//   }
 
+//   return {
+//     value,
+//     clear,
+//     removeIndex,
+//     add
+//   }
+
+// }
+
+export const useArray = <T>(initialArray: T[]) => {
+  const [value, setValue] = useState(initialArray);
   return {
     value,
-    clear,
-    removeIndex,
-    add
+    setValue,
+    add: (item: T) => setValue([...value, item]),
+    clear: () => setValue([]),
+    removeIndex: (index: number) => {
+      const copy = [...value];
+      copy.splice(index, 1);
+      setValue(copy);
+    },
   }
-
 }
