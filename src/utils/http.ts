@@ -44,6 +44,6 @@ export const http = async (endpoint: string, { data, token, headers, ...customCo
 // 以http方法为基础的自动携带token的方法
 export const useHttp = () => {
     const { user } = useAuth();
-    // Parameters:ts操作符
+    // Parameters:TS Utility Types
     return (...[endpoint, config]: Parameters<typeof http>) => http(endpoint, { ...config, token: user?.token })
 }

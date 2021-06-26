@@ -9,6 +9,7 @@ interface AuthForm {
     password: string
 }
 
+// 保持登录状态
 const bootstrapUser = async () => {
     let user = null
     const token = auth.getToken()
@@ -19,7 +20,7 @@ const bootstrapUser = async () => {
     return user
 }
 
-const AuthContext = React.createContext<| {
+const AuthContext = React.createContext<{
     user: User | null,
     register: (form: AuthForm) => Promise<void>,
     login: (form: AuthForm) => Promise<void>,

@@ -1,28 +1,28 @@
-import React from 'react';
+import { Select, Input } from "antd";
 
 export interface User {
-  id:string;
-  name:string;
-  email:string;
-  title:string;
-  organization:string;
-  token:string
+  id: string;
+  name: string;
+  email: string;
+  title: string;
+  organization: string;
+  token: string
 }
 
-interface SearchPanelProps{
-  users:User[],
-  param:{
-    name:string;
-    personId:string;
+interface SearchPanelProps {
+  users: User[],
+  param: {
+    name: string;
+    personId: string;
   },
-  setParam:(param:SearchPanelProps['param'])=>void;
+  setParam: (param: SearchPanelProps['param']) => void;
 }
 
-export const SearchPanel = ({ users, param, setParam }:SearchPanelProps) => {
+export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
   return (
     <form>
       <div>
-        <input
+        <Input
           type="text"
           value={param.name}
           onChange={(e) =>
@@ -32,24 +32,24 @@ export const SearchPanel = ({ users, param, setParam }:SearchPanelProps) => {
             })
           }
         />
-        <select
+        <Select
           value={param.personId}
-          onChange={(e) =>
+          onChange={(value) =>
             setParam({
               ...param,
-              personId: e.target.value,
+              personId: value,
             })
           }
         >
-          <option value="">负责人</option>
-          {users.map((user:User) => {
+          <Select.Option value="">负责人</Select.Option>
+          {users.map((user: User) => {
             return (
-              <option value={user.id} key={user.id}>
+              <Select.Option value={user.id} key={user.id}>
                 {user.name}
-              </option>
+              </Select.Option>
             );
           })}
-        </select>
+        </Select>
       </div>
     </form>
   );
