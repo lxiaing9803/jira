@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 export const isVoid = (value: unknown) => value === undefined || value === null || value === ''
@@ -34,34 +34,6 @@ export const useDebounce = <V>(value: V, delay?: number) => {
   return debouncedValue;
 };
 
-// export const useArray = <v>(array: v[]) => {
-//   const [value, setValue] = useState(array);
-//   // 清空数据
-//   const clear = () => {
-//     setValue([])
-//   }
-//   // 按下标清除数据
-//   const removeIndex = (currentIndex: number) => {
-//     let arr = [...value];
-//     arr.splice(currentIndex, 1);
-//     setValue([...arr])
-//   }
-//   // 添加数据
-//   const add = (item: v) => {
-//     let arr = [...value];
-//     arr.push(item);
-//     setValue([...arr])
-//   }
-
-//   return {
-//     value,
-//     clear,
-//     removeIndex,
-//     add
-//   }
-
-// }
-
 export const useArray = <T>(initialArray: T[]) => {
   const [value, setValue] = useState(initialArray);
   return {
@@ -75,4 +47,21 @@ export const useArray = <T>(initialArray: T[]) => {
       setValue(copy);
     },
   }
+}
+
+
+export const useDocumentTitle = (title: string, keepOnMount: boolean = true) => {
+  const oldTitle = useRef(document.title).current
+
+  useEffect(() => {
+    document.title = title
+  }, [title])
+
+  useEffect(() => {
+    return () => {
+      if (!keepOnMount) {
+        document.title = oldTitle
+      }
+    }
+  }, [keepOnMount, oldTitle])
 }
