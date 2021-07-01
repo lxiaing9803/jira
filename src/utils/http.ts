@@ -20,7 +20,7 @@ export const http = async (endpoint: string, { data, token, headers, ...customCo
         ...customConfig
     }
     if (config.method.toUpperCase() === 'GET') {
-        data ? endpoint += `?${qs.stringify(data)}` : endpoint += ''
+        endpoint += `?${qs.stringify(data)}`
     } else {
         config.body = JSON.stringify(data || {})
     }
