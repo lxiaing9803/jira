@@ -21,6 +21,7 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
         ...defaultInitialState,
         ...initialState
     })
+    const [retry, setRetry] = useState(() => () => { })
 
     const setData = (data: D) => setState({
         data,
@@ -35,10 +36,16 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
     })
 
     // 触发异步
-    const run = (promise: Promise<D>) => {
+    const run = (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
         if (!promise || !promise.then) {
             throw new Error('请传入Promise类型数据')
         }
+        setRetry(() => () => {
+            if (runConfig?.retry) {
+                run(runConfig?.retry(), runConfig)
+            }
+
+        })
         setState({ ...state, stat: 'loading' })
         return promise.then(data => {
             setData(data)
@@ -55,11 +62,15 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
         })
     }
 
+
+
     return {
         isIdle: state.stat === 'idle',
         isLoading: state.stat === 'loading',
         isError: state.stat === 'error',
         isSuccess: state.stat === 'success',
+        // retry调用时重新执行一次run
+        retry,
         run,
         setData,
         setError,
