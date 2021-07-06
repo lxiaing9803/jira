@@ -1,3 +1,4 @@
+import { useMountRef } from './index';
 import { useState } from 'react';
 interface State<D> {
     error: null | Error,
@@ -21,6 +22,9 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
         ...defaultInitialState,
         ...initialState
     })
+
+    const mountRef = useMountRef()
+
     const [retry, setRetry] = useState(() => () => { })
 
     const setData = (data: D) => setState({
@@ -48,8 +52,11 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
         })
         setState({ ...state, stat: 'loading' })
         return promise.then(data => {
-            setData(data)
-            return data
+            if (mountRef.current) {
+                setData(data)
+                return data
+            }
+
         }).catch(error => {
             // 这里的catch会消化异常，如果不主动抛出，就不能在外面接收到异常
             setError(error)
