@@ -1,5 +1,5 @@
 import { useMountRef } from './index';
-import { useCallback, useState } from 'react';
+import { useCallback, useReducer, useState } from 'react';
 interface State<D> {
     error: null | Error,
     data: D | null,
@@ -16,28 +16,37 @@ const defaultConfig = {
     throwOnError: false
 }
 
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
+    const mountRef = useMountRef()
+
+    return useCallback((...args: T[]) => (mountRef.current ? dispatch(...args) : void 0), [dispatch, mountRef])
+}
+
 export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defaultConfig) => {
     const config = { ...defaultConfig, ...initialConfig }
-    const [state, setState] = useState<State<D>>({
-        ...defaultInitialState,
-        ...initialState
-    })
+    const [state, dispatch] = useReducer(
+        (state: State<D>, action: Partial<State<D>>) => ({ ...state, ...action }),
+        {
+            ...defaultInitialState,
+            ...initialState
+        }
+    )
 
-    const mountRef = useMountRef()
+    const safeDispatch = useSafeDispatch(dispatch)
 
     const [retry, setRetry] = useState(() => () => { })
 
-    const setData = useCallback((data: D) => setState({
+    const setData = useCallback((data: D) => safeDispatch({
         data,
         stat: 'success',
         error: null
-    }), [])
+    }), [safeDispatch])
 
-    const setError = useCallback((error: Error) => setState({
+    const setError = useCallback((error: Error) => safeDispatch({
         error,
         stat: 'error',
         data: null
-    }), [])
+    }), [safeDispatch])
 
     // 触发异步
     const run = useCallback(
@@ -51,12 +60,12 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
                 }
 
             })
-            setState(prevState => ({ ...prevState, stat: 'loading' }))
+            safeDispatch({ stat: 'loading' })
             return promise.then(data => {
-                if (mountRef.current) {
-                    setData(data)
-                    return data
-                }
+
+                setData(data)
+                return data
+
 
             }).catch(error => {
                 // 这里的catch会消化异常，如果不主动抛出，就不能在外面接收到异常
@@ -69,7 +78,7 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
                 return error
             })
 
-        }, [config.throwOnError, mountRef, setData, setError])
+        }, [config.throwOnError, safeDispatch, setData, setError])
 
 
 
