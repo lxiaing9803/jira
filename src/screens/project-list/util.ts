@@ -3,7 +3,6 @@ import { useQuery } from 'react-query';
 import { useHttp } from 'utils/http';
 import { useSetUrlSearchParam, useUrlQueryParam } from 'utils/url';
 import { Project } from './list';
-import { useSearchParams } from 'react-router-dom';
 
 // 项目列表搜索的参数
 export const useProjectsSearchParams = () => {
@@ -39,7 +38,7 @@ export const useProjectModal = () => {
     setEditingProjectId({ editingProjectId: id });
 
   return {
-    projectModalOpen: projectCreate === 'true' || Boolean(editingProject),
+    projectModalOpen: projectCreate === 'true' || Boolean(editingProjectId),
     open,
     close,
     startEdit,
