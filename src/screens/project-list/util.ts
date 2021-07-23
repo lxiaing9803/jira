@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useQuery } from 'react-query';
+import { Project } from 'types/project';
 import { useHttp } from 'utils/http';
 import { useSetUrlSearchParam, useUrlQueryParam } from 'utils/url';
-import { Project } from './list';
 
 // 项目列表搜索的参数
 export const useProjectsSearchParams = () => {
