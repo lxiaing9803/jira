@@ -10,6 +10,7 @@ import { ProjectScreen } from 'screens/project';
 import { resetRoute } from 'utils';
 import { ProjectModal } from 'screens/project-list/project-modal';
 import { ProjectPopover } from 'components/project-popover';
+import { UserPopover } from 'components/user-popover';
 
 export const AuthenticatedApp = () => {
   return (
@@ -37,7 +38,7 @@ const PageHeader = () => {
           <SoftwareLogo width="18rem" color="rgb(38,132,255)" />
         </ButtonNoPadding>
         <ProjectPopover />
-        <span>用户</span>
+        <UserPopover />
       </HeaderLeft>
       <HeaderRight>
         <User />
@@ -78,6 +79,7 @@ const Header = styled(Row)`
   padding: 3.2rem;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
   z-index: 1;
+  cursor: pointer;
 `;
 const HeaderLeft = styled(Row)``;
 const HeaderRight = styled.div``;
