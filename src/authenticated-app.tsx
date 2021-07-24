@@ -68,20 +68,20 @@ const User = () => {
 };
 
 const Container = styled.div`
-  height: 100vh;
   display: grid;
-  grid-template-rows: 6rem 1fr 6rem;
+  grid-template-rows: 6rem 1fr;
+  height: 100vh;
 `;
+
+// grid-area 用来给grid子元素起名字
 const Header = styled(Row)`
   padding: 3.2rem;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
   z-index: 1;
 `;
-
 const HeaderLeft = styled(Row)``;
-
 const HeaderRight = styled.div``;
-
 const Main = styled.main`
-  height: calc(100vh-6rem);
+  display: flex;
+  overflow: hidden;
 `;
