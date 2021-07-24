@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
-export const isVoid = (value: unknown) => value === undefined || value === null || value === ''
+export const isVoid = (value: unknown) =>
+  value === undefined || value === null || value === '';
 
 export const cleanObject = (object: { [key: string]: unknown }) => {
   const result = { ...object };
@@ -24,9 +25,9 @@ export const useDebounce = <V>(value: V, delay?: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
-    // 每次在value变化后设置一个定时器
+    // 每次在value变化以后，设置一个定时器
     const timeout = setTimeout(() => setDebouncedValue(value), delay);
-    // 清理副作用，每次在上一个useEffect处理完后再运行
+    // 每次在上一个useEffect处理完以后再运行
     return () => clearTimeout(timeout);
   }, [value, delay]);
 
@@ -45,39 +46,59 @@ export const useArray = <T>(initialArray: T[]) => {
       copy.splice(index, 1);
       setValue(copy);
     },
-  }
-}
+  };
+};
 
-
-export const useDocumentTitle = (title: string, keepOnMount: boolean = true) => {
-  const oldTitle = useRef(document.title).current
+export const useDocumentTitle = (
+  title: string,
+  keepOnMount: boolean = true
+) => {
+  const oldTitle = useRef(document.title).current;
 
   useEffect(() => {
-    document.title = title
-  }, [title])
+    document.title = title;
+  }, [title]);
 
   useEffect(() => {
     return () => {
       if (!keepOnMount) {
-        document.title = oldTitle
+        document.title = oldTitle;
       }
-    }
-  }, [keepOnMount, oldTitle])
-}
+    };
+  }, [keepOnMount, oldTitle]);
+};
 
-export const resetRoute = () => window.location.href = window.location.origin
+export const resetRoute = () => (window.location.href = window.location.origin);
+
+/**
+ * 传入一个对象，和键集合，返回对应的对象中的键值对
+ * @param obj
+ * @param keys
+ */
+export const subset = <
+  O extends { [key in string]: unknown },
+  K extends keyof O
+>(
+  obj: O,
+  keys: K[]
+) => {
+  const filteredEntries = Object.entries(obj).filter(([key]) =>
+    keys.includes(key as K)
+  );
+  return Object.fromEntries(filteredEntries) as Pick<O, K>;
+};
 
 /**
  * 返回组件的挂载状态，如果还没挂载或者已经卸载，返回false，反之返回true
  */
 export const useMountRef = () => {
-  const mountRef = useRef(false)
+  const mountRef = useRef(false);
   useEffect(() => {
-    mountRef.current = true
+    mountRef.current = true;
     return () => {
-      mountRef.current = false
-    }
-  })
+      mountRef.current = false;
+    };
+  });
 
-  return mountRef
-}
+  return mountRef;
+};

@@ -1,7 +1,5 @@
 import { useMemo } from 'react';
-import { useQuery } from 'react-query';
-import { Project } from 'types/project';
-import { useHttp } from 'utils/http';
+import { useProject } from 'utils/project';
 import { useSetUrlSearchParam, useUrlQueryParam } from 'utils/url';
 
 // 项目列表搜索的参数
@@ -45,15 +43,4 @@ export const useProjectModal = () => {
     editingProject,
     isLoading,
   };
-};
-
-export const useProject = (id?: number) => {
-  const client = useHttp();
-  return useQuery<Project>(
-    ['project', { id }],
-    () => client(`projects/${id}`),
-    {
-      enabled: Boolean(id),
-    }
-  );
 };
