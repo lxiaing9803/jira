@@ -56,7 +56,7 @@ export const KanbanColumn = React.forwardRef<
       </Row>
       <TaskContainer>
         <Drop type="ROW" direction="vertical" droppableId={String(kanban.id)}>
-          <DropChild>
+          <DropChild style={{ minHeight: '5px' }}>
             {tasks?.map((task, taskIndex) => (
               <Drag
                 key={task.id}
@@ -90,8 +90,8 @@ const More = ({ kanban }: { kanban: Kanban }) => {
   };
   const overlay = (
     <Menu>
-      <Menu.Item>
-        <Button type={'link'} onClick={startDelete}>
+      <Menu.Item key="delete">
+        <Button type="link" onClick={startDelete}>
           删除
         </Button>
       </Menu.Item>
