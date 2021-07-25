@@ -9,11 +9,13 @@ import {
 } from './use-optimistic-options';
 import { Project } from 'types/project';
 import { SortProps } from './kanban';
+import { useDebounce } from 'utils';
 
 export const useTasks = (param?: Partial<Task>) => {
   const client = useHttp();
-  return useQuery<Task[], Error>(['tasks', param], () =>
-    client('tasks', { data: param })
+  const debouncedParam = { ...param, name: useDebounce(param?.name, 200) };
+  return useQuery<Task[], Error>(['tasks', debouncedParam], () =>
+    client('tasks', { data: debouncedParam })
   );
 };
 
