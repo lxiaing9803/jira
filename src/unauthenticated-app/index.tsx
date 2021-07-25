@@ -9,7 +9,7 @@ import right from 'assets/right.svg';
 import { useDocumentTitle } from 'utils';
 import { ErrorBox } from 'components/lib';
 
-export const UnauthenticatedApp = () => {
+export default function UnauthenticatedApp() {
   useDocumentTitle('请登录注册以继续', false);
 
   const [isRegister, setIsRegister] = useState(false);
@@ -33,7 +33,7 @@ export const UnauthenticatedApp = () => {
       </ShadowCard>
     </Container>
   );
-};
+}
 
 export const LongButton = styled(Button)`
   width: 100%;
